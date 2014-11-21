@@ -7,6 +7,7 @@ var doctypes = _dereq_('./doctypes');
 var runtime = _dereq_('./runtime');
 var utils = _dereq_('./utils');
 var selfClosing = _dereq_('void-elements');
+var optionalTags = require('optional-tags');
 var parseJSExpression = _dereq_('character-parser').parseMax;
 var constantinople = _dereq_('constantinople');
 
@@ -43,6 +44,7 @@ var Compiler = module.exports = function Compiler(node, options) {
   this.mixins = {};
   this.dynamicMixins = false;
   if (options.doctype) this.setDoctype(options.doctype);
+  if (options.omitTag) this.omittedTags = optionalTags(this.pp ? '' : options.omitTag);
 };
 
 /**
@@ -431,6 +433,7 @@ Compiler.prototype = {
     this.indents++;
     var name = tag.name
       , pp = this.pp
+      , omittedTags = this.omittedTags
       , self = this;
 
     function bufferName() {
@@ -479,9 +482,12 @@ Compiler.prototype = {
       if (pp && !tag.isInline() && 'pre' != tag.name && !tag.canInline())
         this.prettyIndent(0, true);
 
-      this.buffer('</');
-      bufferName();
-      this.buffer('>');
+      // provide omit tags as optional
+      if (!omittedTags || !~omittedTags.ends.indexOf(tag.name)) {
+        this.buffer('</');
+        bufferName();
+        this.buffer('>');
+      }
     }
 
     if ('pre' == tag.name) this.escape = false;
