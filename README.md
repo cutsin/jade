@@ -1,4 +1,4 @@
-# Jade with optional tags
+# [Jade](https://github.com/jadejs/jade) with optional tags
 
 It's a W3C's spec: http://www.w3.org/html/wg/drafts/html/master/syntax.html#optional-tags
 

@@ -1,4 +1,4 @@
-# 可省略标签的Jade
+# 可省略标签的[Jade](https://github.com/jadejs/jade)
 
 首先，这是个W3规范：http://www.w3.org/html/wg/drafts/html/master/syntax.html#optional-tags
 
