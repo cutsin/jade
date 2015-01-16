@@ -1,3 +1,45 @@
+1.9.0 / 2014-01-13
+==================
+
+  * Fix `--watch` sometimes dying when there were file-system errors ([@ForbesLindesay](http://www.forbeslindesay.co.uk/))
+  * Fix `--watch` by using `fs.watchFile` correctly ([@TimothyGu](https://github.com/TimothyGu))
+  * Fix errors with using the CLI to compile from stdin
+  * Better looking badges ([@TimothyGu](https://github.com/TimothyGu))
+  * Added `--extension` to CLI([@nicocedron](https://github.com/nicocedron) and [@TimothyGu](https://github.com/TimothyGu))
+  * Refactor and improve internal cache handling ([@TimothyGu](https://github.com/TimothyGu))
+  * Loads more tests ([@TimothyGu](https://github.com/TimothyGu))
+
+1.8.2 / 2014-12-16
+==================
+
+  * Use `-` as the default filename when using stdin on CLI ([@TimothyGu](https://github.com/TimothyGu))
+  * Prevent some compiler errors being silenced ([@ForbesLindesay](http://www.forbeslindesay.co.uk/))
+  * Remove use of non-standard `string.trimLeft()` ([@ForbesLindesay](http://www.forbeslindesay.co.uk/))
+  * Fix bug in CLI when no name was provided for child template ([@ForbesLindesay](http://www.forbeslindesay.co.uk/))
+  * Remove dependency on monocle (hopefully fixing installation on 0.8) ([@ForbesLindesay](http://www.forbeslindesay.co.uk/))
+  * Add gitter chat room ([@ForbesLindesay](http://www.forbeslindesay.co.uk/))
+
+1.8.1 / 2014-11-30
+==================
+
+  * Fix corner case when the pretty option was passed a non-string truthy value ([@TimothyGu](https://github.com/TimothyGu))
+  * Warn when `lexer` is given as an option ([@TimothyGu](https://github.com/TimothyGu))
+  * Update dependencies ([@TimothyGu](https://github.com/TimothyGu))
+
+1.8.0 / 2014-11-28
+==================
+
+  * Fix empty text-only block ([@rlidwka](https://github.com/rlidwka))
+  * Warn about future change to ISO 8601 style dates ([@TimothyGu](https://github.com/TimothyGu) and [@ForbesLindesay](http://www.forbeslindesay.co.uk/))
+  * Add warnings when data-attributes contain ampersands ([@TimothyGu](https://github.com/TimothyGu))
+  * Allow custom pretty indentation ([@bfred-it](https://github.com/bfred-it))
+  * Add support for an object in the style attribute ([@ForbesLindesay](http://www.forbeslindesay.co.uk/))
+  * Add support for an object in the class attribute ([@ForbesLindesay](http://www.forbeslindesay.co.uk/))
+  * Ignore fs module in browser builds ([@sokra](https://github.com/sokra))
+  * Update dependencies ([@hildjj](https://github.com/hildjj))
+  * Check mixin arguments are valid JavaScript expressions ([@ForbesLindesay](http://www.forbeslindesay.co.uk/))
+  * Remove symlink ([@slang800](https://github.com/slang800))
+
 1.7.0 / 2014-09-17
 ==================
 

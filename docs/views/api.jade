@@ -28,8 +28,8 @@ block content
       dd.type.string string
       dd.description If the doctype is not specified as part of the template, you can specify it here.  It is sometimes useful to get self-closing tags and remove mirroring of boolean attributes.
       dt pretty:
-      dd.type.boolean boolean
-      dd.description Adds whitespace to the resulting html to make it easier for a human to read
+      dd.type boolean | string
+      dd.description Adds whitespace to the resulting html to make it easier for a human to read using #[code '  '] as indentation. If a string is specified, that will be used as indentation instead (e.g. #[code '\t']).
       dt self:
       dd.type.boolean boolean
       dd.description Use a #[code self] namespace to hold the locals (false by default)
@@ -39,9 +39,18 @@ block content
       dt compileDebug:
       dd.type.boolean boolean
       dd.description Set this to false to disable debugging instrumentation (recommended in production).  Set it to true to include the function source in the compiled template for better error messages (sometimes useful in development).
+      dt cache:
+      dd.type.boolean boolean
+      dd.description If set to true, compiled functions are cached. #[code filename] must be set as the cache key.
       dt compiler:
       dd.type.function class
       dd.description Override the default compiler
+      dt parser:
+      dd.type.function class
+      dd.description Override the default parser
+      dt globals:
+      dd.type.array= 'Array.<string>'
+      dd.description Add a list of global names to make accessible in templates
     div }
 
   h3 jade.compile(source, options)
