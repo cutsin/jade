@@ -34,6 +34,7 @@ program
   .option('-E, --extension <extension>', 'specify the output file extension')
   .option('--name-after-file', 'Name the template after the last section of the file path (requires --client and overriden by --name)')
   .option('--doctype <str>', 'Specify the doctype on the command line (useful if it is not specified by the template)')
+  .option('--omitTag <str>', 'Specify the omit tag\'s safe level on the command line [safe|redical|unsafe|dangerous]')
 
 
 program.on('--help', function(){
@@ -97,6 +98,10 @@ if (typeof program.name === 'string') {
 // --doctype
 
 options.doctype = program.doctype;
+
+// --omitTag
+
+options.omitTag = program.omitTag;
 
 // left-over args are file paths
 

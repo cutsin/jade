@@ -887,6 +887,26 @@ describe('jade', function(){
     it('does not produce warnings for issue-1593', function () {
       jade.compileFile(__dirname + '/fixtures/issue-1593/index.jade');
     });
+    it('should omit optional tags', function(){
+      var str = [
+        'ul',
+        '  li',
+        '    dl',
+        '      dt',
+        '      dd'
+      ].join('\n');
+
+      assert.equal('<ul><li><dl><dt><dd></dl></ul>', jade.render(str,{omitTag:true}));
+
+      var str2 = [
+        'body',
+        '  p say hi'
+      ].join('\n');
+
+      assert.equal('<body>  <p>say hi</p></body>', jade.render(str2,{omitTag:'radical', pretty: true}).split('\n').join(''));
+      assert.equal('<body><p>say hi</p>', jade.render(str2,{omitTag:'radical'}));
+      assert.equal('<body><p>say hi', jade.render(str2,{omitTag:'dangerous'}));
+    });
     it('should support caching (pass 1)', function () {
       fs.writeFileSync(__dirname + '/temp/input-compileFile.jade', '.foo bar');
       var fn = jade.compileFile(__dirname + '/temp/input-compileFile.jade',
