@@ -7,7 +7,9 @@
 
 ## 安装
 
+```bash
 npm install cutsin/jade
+```
 
 
 ## 使用
@@ -27,9 +29,9 @@ var html = fn(locals)
 
 ## 为什么要省略标签？
 
-1. 文一：[《为什么要省略html标签》](https://github.com/cutsin/Passion-of-the-Cutsin/blob/master/2013/03/%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%9C%81%E7%95%A5html%E6%A0%87%E7%AD%BE.md)
+1. 参考一：[《为什么要省略html标签》](https://github.com/cutsin/Passion-of-the-Cutsin/blob/master/2013/03/%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%9C%81%E7%95%A5html%E6%A0%87%E7%AD%BE.md)
 
-2. 文二：[《可省略的html标签及其实践》](http://moonless.net/demo/optional-tags/)
+2. 参考二：[《可省略的html标签及其实践》](http://moonless.net/demo/optional-tags/)
 
 3. 在浏览器中，HTML在压缩（去掉空白字符）前后，渲染的结果是不同的，因为浏览器会[按照规范生成隐式结束标记](http://www.w3.org/TR/html5/syntax.html#generate-implied-end-tags)。
 

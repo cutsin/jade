@@ -4,6 +4,12 @@
 
 It's a W3C's spec: http://www.w3.org/html/wg/drafts/html/master/syntax.html#optional-tags
 
+## Install
+
+```bash
+npm install cutsin/jade
+```
+
 ## Usage
 
 ```bash
