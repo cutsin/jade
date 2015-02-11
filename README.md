@@ -1,5 +1,7 @@
 # [Jade](https://github.com/jadejs/jade) with optional tags
 
+[中文文档](README.zh-CN.md)
+
 It's a W3C's spec: http://www.w3.org/html/wg/drafts/html/master/syntax.html#optional-tags
 
 ## Usage
