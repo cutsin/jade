@@ -5,12 +5,12 @@ It's a W3C's spec: http://www.w3.org/html/wg/drafts/html/master/syntax.html#opti
 ## Usage
 
 ```bash
-bash$ jade foo bar --omitTag [safe|redical|unsafe|dangerous]
+bash$ jade foo bar --omitTag [safe|radical|unsafe|dangerous]
 ```
 ```javascript
 var jade = require('jade')
 var options = {
-	omitTag : 'redical'	// or 'safe' or 'unsafe' or 'dangerous'
+	omitTag : 'radical'	// or 'safe' or 'unsafe' or 'dangerous'
 }
 var fn = jade.compileFile('./foo.jade', options)
 var html = fn(locals)
