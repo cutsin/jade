@@ -1,4 +1,43 @@
-1.9.0 / 2014-01-13
+1.11.0 / 2015-06-12
+==================
+
+  * Added block code support ([@alephyud](https://github.com/alephyud))
+  * Improved runtime performance of mixins significantly ([Andreas Lubbe](https://github.com/alubbe))
+  * Improved runtime performance of jade's string escaping ([Andreas Lubbe](https://github.com/alubbe)) and ([@ForbesLindesay](http://www.forbeslindesay.co.uk/))
+  * Better line number counting for pipeless text ([@alephyud](https://github.com/alephyud))
+
+
+1.10.0 / 2015-05-25
+==================
+
+  * Now supports jstransformers, which allows improved handling of embedded languages such as Coffee-Script, and deprecated Transformers support in filters - to be removed in 2.0.0 ([@ForbesLindesay](http://www.forbeslindesay.co.uk/))
+  * CLI: added a flag to keep directory hierarchy when a directory is specified - this behavior will be the default in 2.0.0 ([@TimothyGu](https://github.com/TimothyGu))
+  * disabled 'compileDebug' flag by default when used with express in production mode ([Andreas Lubbe](https://github.com/alubbe))
+  * Fixed a memory leak on modern versions of Chrome as well as node 0.12 and iojs ([Andreas Lubbe](https://github.com/alubbe))
+  * update website ([@GarthDB](https://github.com/GarthDB))
+
+1.9.2 / 2015-01-18
+==================
+
+  * Do not ignore some parser errors for mismatched parenthesis ([@TimothyGu](https://github.com/TimothyGu))
+  * Warn for `:` that is not followed by a space ([@ForbesLindesay](http://www.forbeslindesay.co.uk/))
+  * Fix #1794 (a bizzare bug with a certain combination of inheritance, mixins and &attributes) ([@ForbesLindesay](http://www.forbeslindesay.co.uk/))
+  * Add `compileClientWithDependenciesTracked` ([@ForbesLindesay](http://www.forbeslindesay.co.uk/))
+  * Support comments in `case` blocks ([@ForbesLindesay](http://www.forbeslindesay.co.uk/))
+  * Fix blocks in nested mixins ([@ForbesLindesay](http://www.forbeslindesay.co.uk/))
+  * Lots more documentation ([@enlore](https://github.com/enlore))
+  * Fix watching in CLI ([@pavel](https://github.com/pavel))
+
+1.9.1 / 2015-01-17
+==================
+
+  * Clean up path/fs functions in CLI as we no longer support node@0.6 ([@TimothyGu](https://github.com/TimothyGu))
+  * Update commander ([@TimothyGu](https://github.com/TimothyGu))
+  * Document `cache` and `parser` options ([@TimothyGu](https://github.com/TimothyGu))
+  * Fix bug in 1.9.0 where we read the file if cache was enabled, even if a string was provided ([@TimothyGu](https://github.com/TimothyGu))
+  * Fix year in changelog ([@tomByrer](https://github.com/tomByrer))
+
+1.9.0 / 2015-01-13
 ==================
 
   * Fix `--watch` sometimes dying when there were file-system errors ([@ForbesLindesay](http://www.forbeslindesay.co.uk/))

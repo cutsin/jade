@@ -1,6 +1,8 @@
 'use strict';
 
 var fs = require('fs');
+var mkdirp = require('mkdirp');
+var rimraf = require('rimraf');
 var path = require('path');
 var assert = require('assert');
 var cp = require('child_process');
@@ -42,21 +44,52 @@ function run(args, stdin, callback) {
   }, callback);
 }
 
-try {
-  fs.mkdirSync(__dirname + '/temp');
-} catch (ex) {
-  if (ex.code !== 'EEXIST') {
-    throw ex;
+rimraf.sync(__dirname + '/temp');
+mkdirp.sync(__dirname + '/temp/inputs/level-1-1');
+mkdirp.sync(__dirname + '/temp/inputs/level-1-2');
+mkdirp.sync(__dirname + '/temp/outputs/level-1-1');
+mkdirp.sync(__dirname + '/temp/outputs/level-1-2');
+
+/**
+ * Set timing limits for a test case
+ */
+function timing(testCase) {
+  if (isIstanbul) {
+    testCase.timeout(20000);
+    testCase.slow(3000);
+  } else {
+    testCase.timeout(12500);
+    testCase.slow(2000);
   }
 }
 
+describe('command line', function () {
+  timing(this);
+  it('jade --version', function (done) {
+    run('-V', function (err, stdout) {
+      if (err) done(err);
+      assert.equal(stdout.trim(), require('../package.json').version);
+      run('--version', function (err, stdout) {
+        if (err) done(err);
+        assert.equal(stdout.trim(), require('../package.json').version);
+        done()
+      });
+    });
+  });
+  it('jade --help', function (done) {
+    // only check that it doesn't crash
+    run('-h', function (err, stdout) {
+      if (err) done(err);
+      run('--help', function (err, stdout) {
+        if (err) done(err);
+        done()
+      });
+    });
+  });
+});
+
 describe('command line with HTML output', function () {
-  if (isIstanbul) {
-    this.timeout(8000);
-    this.slow(6000);
-  } else {
-    this.slow(250);
-  }
+  timing(this);
   it('jade --no-debug input.jade', function (done) {
     fs.writeFileSync(__dirname + '/temp/input.jade', '.foo bar');
     fs.writeFileSync(__dirname + '/temp/input.html', '<p>output not written</p>');
@@ -87,6 +120,17 @@ describe('command line with HTML output', function () {
       done();
     });
   });
+  it('jade --no-debug --obj "obj.json" input.jade', function (done) {
+    fs.writeFileSync(__dirname + '/temp/obj.json', '{"loc":"str"}');
+    fs.writeFileSync(__dirname + '/temp/input.jade', '.foo= loc');
+    fs.writeFileSync(__dirname + '/temp/input.html', '<p>output not written</p>');
+    run('--no-debug --obj "'+__dirname+'/temp/obj.json" input.jade', function (err) {
+      if (err) return done(err);
+      var html = fs.readFileSync(__dirname + '/temp/input.html', 'utf8');
+      assert(html === '<div class="foo">str</div>');
+      done();
+    });
+  });
   it('cat input.jade | jade --no-debug', function (done) {
     fs.writeFileSync(__dirname + '/temp/input.jade', '.foo bar');
     run('--no-debug', 'cat input.jade | ', function (err, stdout, stderr) {
@@ -95,15 +139,60 @@ describe('command line with HTML output', function () {
       done();
     });
   });
+  it('jade --no-debug --out outputs input.jade', function (done) {
+    fs.writeFileSync(__dirname + '/temp/input.jade', '.foo bar');
+    fs.writeFileSync(__dirname + '/temp/input.html', '<p>output not written</p>');
+    run('--no-debug --out outputs input.jade', function (err) {
+      if (err) return done(err);
+      var html = fs.readFileSync(__dirname + '/temp/outputs/input.html', 'utf8');
+      assert(html === '<div class="foo">bar</div>');
+      done();
+    });
+  });
+  context('when input is directory', function () {
+    it('jade --no-debug --out outputs inputs', function (done) {
+      fs.writeFileSync(__dirname + '/temp/inputs/input.jade', '.foo bar 1');
+      fs.writeFileSync(__dirname + '/temp/inputs/level-1-1/input1-1.jade', '.foo bar 1-1');
+      fs.writeFileSync(__dirname + '/temp/inputs/level-1-2/input1-2.jade', '.foo bar 1-2');
+      fs.writeFileSync(__dirname + '/temp/outputs/input.html', 'BIG FAT HEN 1');
+      fs.writeFileSync(__dirname + '/temp/outputs/input1-1.html', 'BIG FAT HEN 1-1');
+      fs.writeFileSync(__dirname + '/temp/outputs/input1-2.html', 'BIG FAT HEN 1-2');
+      run('--no-debug --out outputs inputs', function (err, stdout, stderr) {
+        if (err) return done(err);
+        var html = fs.readFileSync(__dirname + '/temp/outputs/input.html', 'utf8');
+        assert(html === '<div class="foo">bar 1</div>');
+        var html = fs.readFileSync(__dirname + '/temp/outputs/input1-1.html', 'utf8');
+        assert(html === '<div class="foo">bar 1-1</div>');
+        var html = fs.readFileSync(__dirname + '/temp/outputs/input1-2.html', 'utf8');
+        assert(html === '<div class="foo">bar 1-2</div>');
+        assert(stderr.indexOf('--hierarchy will become the default') !== -1,
+               '--hierarchy default warning not shown');
+        done();
+      });
+    });
+    it('jade --no-debug --hierarchy --out outputs inputs', function (done) {
+      fs.writeFileSync(__dirname + '/temp/inputs/input.jade', '.foo bar 1');
+      fs.writeFileSync(__dirname + '/temp/inputs/level-1-1/input.jade', '.foo bar 1-1');
+      fs.writeFileSync(__dirname + '/temp/inputs/level-1-2/input.jade', '.foo bar 1-2');
+      fs.writeFileSync(__dirname + '/temp/outputs/input.html', 'BIG FAT HEN 1');
+      fs.writeFileSync(__dirname + '/temp/outputs/level-1-1/input.html', 'BIG FAT HEN 1-1');
+      fs.writeFileSync(__dirname + '/temp/outputs/level-1-2/input.html', 'BIG FAT HEN 1-2');
+      run('--no-debug --hierarchy --out outputs inputs', function (err) {
+        if (err) return done(err);
+        var html = fs.readFileSync(__dirname + '/temp/outputs/input.html', 'utf8');
+        assert(html === '<div class="foo">bar 1</div>');
+        var html = fs.readFileSync(__dirname + '/temp/outputs/level-1-1/input.html', 'utf8');
+        assert(html === '<div class="foo">bar 1-1</div>');
+        var html = fs.readFileSync(__dirname + '/temp/outputs/level-1-2/input.html', 'utf8');
+        assert(html === '<div class="foo">bar 1-2</div>');
+        done();
+      });
+    });
+  });
 });
 
 describe('command line with client JS output', function () {
-  if (isIstanbul) {
-    this.timeout(8000);
-    this.slow(6000);
-  } else {
-    this.slow(250);
-  }
+  timing(this);
   it('jade --no-debug --client --name myTemplate input.jade', function (done) {
     fs.writeFileSync(__dirname + '/temp/input.jade', '.foo bar');
     fs.writeFileSync(__dirname + '/temp/input.js', 'throw new Error("output not written");');
@@ -160,6 +249,7 @@ describe('command line watch mode', function () {
   var watchProc;
   var stdout = '';
   after(function() {
+    if (!watchProc) return
     // Just to be sure
     watchProc.stderr.removeAllListeners('data');
     watchProc.stdout.removeAllListeners('data');
@@ -173,12 +263,7 @@ describe('command line watch mode', function () {
     setTimeout(done, 1000);
   });
   it('jade --no-debug --client --name-after-file --watch input-file.jade (pass 1)', function (done) {
-    if (isIstanbul) {
-      this.timeout(8000);
-      this.slow(6000);
-    } else {
-      this.slow(300);
-    }
+    timing(this);
     fs.writeFileSync(__dirname + '/temp/input-file.jade', '.foo bar');
     fs.writeFileSync(__dirname + '/temp/input-file.js', 'throw new Error("output not written (pass 1)");');
     var cmd = getRunner();
